@@ -20,6 +20,16 @@ class Customer
     @id = customer['id'].to_i()
   end
 
+  def film()
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets
+    ON tickets.film_id = film_id
+    WHERE customer_id = $1"
+    values = [@id]
+    films = SqlRunner.run(sql, values)
+    return films.map { |film| Film.new(film) }
+  end
+
   def update()
     sql = "UPDATE customers SET (name, funds) VALUES ($1, $2) WHERE id = $3"
     values = [@name, @funds, @id]
