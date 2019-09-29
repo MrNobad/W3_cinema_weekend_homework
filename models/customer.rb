@@ -20,6 +20,12 @@ class Customer
     @id = customer['id'].to_i()
   end
 
+  def update()
+    sql = "UPDATE customers SET (name, funds) VALUES ($1, $2) WHERE id = $3"
+    values = [@name, @funds, @id]
+    SqlRunner.run(sql, values)
+  end
+
   def self.all
     sql = "SELECT * FROM customers"
     customers = SqlRunner.run(sql)
@@ -29,6 +35,13 @@ class Customer
   def self.delete_all
     sql = "DELETE FROM customers"
     SqlRunner.run(sql)
+  end
+
+  def self.find_by_id(id)
+    sql = "SELECT from customers WHERE id = $1"
+    values = [id]
+    result = SqlRunner.run(sql, values)
+    return Customer.new(result[0])
   end
 
 end
