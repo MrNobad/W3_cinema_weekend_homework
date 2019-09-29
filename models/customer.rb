@@ -36,6 +36,20 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
+  def tickets()
+    sql = "SELECT * FROM films where id = $1"
+    values = [@id]
+    ticket_price = SqlRunner.run(sql, values)
+    return ticket_price.map{ |film| Film.new(film) }
+  end
+
+  def funds_left()
+    tickets = self.tickets()
+    ticket_prices = film.map{ |film| film.price.to_i }
+    total_tickets = ticket_prices.sum
+    return @funds - total_tickets
+  end
+
   def self.all
     sql = "SELECT * FROM customers"
     customers = SqlRunner.run(sql)
